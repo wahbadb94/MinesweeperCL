@@ -35,8 +35,7 @@ namespace MinesweeperCL
                 foreach (var location in row)
                 {
                     // display appropriate character for location
-                    string displayCharacter = _displayCharacterMatrix[location.Y][location.X];
-                    DisplayLocation(location, displayCharacter);
+                    DisplayLocation(location);
                 }
             }
 
@@ -45,8 +44,16 @@ namespace MinesweeperCL
             Console.Write(new String('\'', board.Size * CellWidth + 1));
         }
 
-        private void DisplayLocation(BoardLocation location, string displayCharacter)
+        private void DisplayLocation(BoardLocation location)
         {
+            string displayCharacter = (location.IsRevealed) ? _displayCharacterMatrix[location.Y][location.X] : " ";
+
+            if (location.IsRevealed) displayCharacter = _displayCharacterMatrix[location.Y][location.X];
+            else
+            {
+                displayCharacter = (location.IsFlagged == true) ? "o" : " ";
+            }
+
             // translate to location
             Console.SetCursorPosition(location.X * CellWidth, location.Y * CellHeight);
 

@@ -32,10 +32,13 @@ namespace MinesweeperCL
                     if (_playerLocation.Y < _board.Size - 1) _playerLocation.Y++;
                     break;
                 case ConsoleKey.X:
-                    // mark board
+                    // toggle location flag
+                    _board.Locations[_playerLocation.Y][_playerLocation.X].IsFlagged = !(_board.Locations[_playerLocation.Y][_playerLocation.X].IsFlagged);
                     break;
                 case ConsoleKey.Z:
                     // reveal location
+                    _board.Locations[_playerLocation.Y][_playerLocation.X].IsRevealed = true;
+                    break;
                 default: break;
             }
         }

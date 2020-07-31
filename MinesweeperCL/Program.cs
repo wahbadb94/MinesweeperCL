@@ -14,10 +14,8 @@ namespace MinesweeperCL
 
             do
             {
-                // config game
+                // config and run game
                 var Game = GameConfig.Config();
-
-                // start game
                 Game.Run();
 
                 // ask to play again

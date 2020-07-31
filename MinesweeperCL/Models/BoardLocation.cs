@@ -8,6 +8,7 @@ namespace MinesweeperCL
     {
         public bool IsMine { get; set; }
         public bool IsRevealed { get; set; }
+        public bool IsFlagged { get; set; }
         public int X { get; }
         public int Y { get; }
 
@@ -16,6 +17,8 @@ namespace MinesweeperCL
             X = x;
             Y = y;
             IsMine = isMine;
+            IsRevealed = false;
+            IsFlagged = false;
         }
     }
 }
