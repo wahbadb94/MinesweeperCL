@@ -25,7 +25,6 @@ namespace MinesweeperCL
 
             do
             {
-                
                 // display board
                 BoardView.View(_board, playerLocation);
 
