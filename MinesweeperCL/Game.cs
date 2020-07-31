@@ -23,10 +23,13 @@ namespace MinesweeperCL
             // give keypress handler access to playerLocation and board Models 
             KeyPressHandler keyPressHandler = new KeyPressHandler(_board, playerLocation);
 
+            // create and init view
+            BoardView view = new BoardView(_board);
+
             do
             {
                 // display board
-                BoardView.View(_board, playerLocation);
+                view.Display(_board, playerLocation);
 
                 // handles keypress and manipulates model data
                 keyPressHandler.Handle(Console.ReadKey(true).Key);

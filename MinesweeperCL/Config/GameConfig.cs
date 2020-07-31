@@ -61,8 +61,8 @@ namespace MinesweeperCL
                 // add 'size' amount of locations per row
                 foreach (var i in Enumerable.Range(0, size))
                 {
-                    // each newly generated location has a 20% chance of being a mine
-                    bool isMine = (random.Next(0, 10) > 7) ? true : false;
+                    // each newly generated location has a 10% chance of being a mine
+                    bool isMine = (random.Next(0, 10) > 8) ? true : false;
 
                     locations[j].Add(new BoardLocation(i, j, isMine));
                 }

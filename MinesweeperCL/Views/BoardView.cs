@@ -1,54 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
+
+using static MinesweeperCL.Views.DisplayConstants;
 
 namespace MinesweeperCL
 {
-    public static class BoardView
+    public class BoardView
     {
-        private const int CellWidth = 4;    // a location on the board is 4 characters wide on the console
-        private const int CellHeight = 2;   // a location on the board is 2 lines tall on the console
+        private readonly List<List<string>> _displayCharacterMatrix;
         
-        // padding to left and right of cell display text based on CellWidth
-        private const int PaddingL = CellWidth / 2 - 1;
-        private const int  PaddingR = (CellWidth / 2 + CellWidth % 2) - 1;
+        public BoardView(Board board)
+        {
+            _displayCharacterMatrix = BoardParser.LocationsToCharacterMatrix(board);
+        }
 
-        public static void View(Board board, Point playerPosition)
+        public void Display(Board board, Point playerPosition)
         {
             // display Board to Screen
-            foreach (var row in board.Locations)
-            {
-                foreach (var location in row)
-                {
-                    DisplayLocation(location);
-                }
-            }
-
-            // draw bottom boarder
-            Console.SetCursorPosition(0, board.Size * CellHeight);
-            Console.Write(new String('\'', board.Size * CellWidth + 1));
+            DisplayBoard(board);
 
             // place cursor at player's position
             PlaceCursor(playerPosition);
         }
 
-        public static void DisplayLocation(BoardLocation location)
+        private void DisplayBoard(Board board)
         {
-            string displayCharacter = "o";
+            // iterate over rows
+            foreach (var row in board.Locations)
+            {
+                // iterate over each row
+                foreach (var location in row)
+                {
+                    // display appropriate character for location
+                    string displayCharacter = _displayCharacterMatrix[location.Y][location.X];
+                    DisplayLocation(location, displayCharacter);
+                }
+            }
 
+            // draw bottom border for entire board
+            Console.SetCursorPosition(0, board.Size * CellHeight);
+            Console.Write(new String('\'', board.Size * CellWidth + 1));
+        }
+
+        private void DisplayLocation(BoardLocation location, string displayCharacter)
+        {
             // translate to location
             Console.SetCursorPosition(location.X * CellWidth, location.Y * CellHeight);
 
-            // draw upper boarder
+            // draw upper cell border
             Console.Write($"|{new String('\'', CellWidth - 1)}|");
 
             // draw contents
-            Console.SetCursorPosition(location.X*CellWidth, location.Y*CellHeight+1);
+            Console.SetCursorPosition(location.X * CellWidth, location.Y * CellHeight + 1);
             Console.Write($"|{new String(' ', PaddingL)}{displayCharacter}{new String(' ', PaddingR)}|");
 
         }
 
-        private static void PlaceCursor(Point currentLocation)
+        private void PlaceCursor(Point currentLocation)
         {
             // place cursor in the middle of the consoles
             Console.SetCursorPosition(
