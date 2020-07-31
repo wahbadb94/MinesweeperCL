@@ -46,9 +46,14 @@ namespace MinesweeperCL
 
         private void DisplayLocation(BoardLocation location)
         {
-            string displayCharacter = (location.IsRevealed) ? _displayCharacterMatrix[location.Y][location.X] : " ";
+            // thin to display based on location state
+            string displayCharacter;
 
-            if (location.IsRevealed) displayCharacter = _displayCharacterMatrix[location.Y][location.X];
+            // display underlying matrix
+            if (location.IsRevealed)
+            {
+                displayCharacter = _displayCharacterMatrix[location.Y][location.X];
+            }
             else
             {
                 displayCharacter = (location.IsFlagged == true) ? "o" : " ";

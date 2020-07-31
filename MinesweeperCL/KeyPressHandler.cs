@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 
 namespace MinesweeperCL
 {
@@ -37,9 +39,38 @@ namespace MinesweeperCL
                     break;
                 case ConsoleKey.Z:
                     // reveal location
-                    _board.Locations[_playerLocation.Y][_playerLocation.X].IsRevealed = true;
+                    Reveal(_playerLocation.X, _playerLocation.Y);
                     break;
                 default: break;
+            }
+        }
+
+        private void Reveal(int x, int y)
+        {
+            _board.Locations[y][x].IsRevealed = true;
+            if (_board.DisplayCharacters[y][x] == "-")
+            {
+                RevealNeighbors(x, y);
+            }
+        }
+
+        private void RevealNeighbors(int x, int y)
+        {
+            //Thread.Sleep(50);
+
+            int minXOffset = (x == 0) ? 0 : -1;
+            int maxXOffset = (x == _board.Size - 1) ? 0 : 1;
+            int minYOffset = (y == 0) ? 0 : -1;
+            int maxYOffset = (y == _board.Size - 1) ? 0 : 1;
+
+            // iterate over neighbors
+            for (int i = minXOffset; i <= maxXOffset; i++)
+            {
+                for (int j = minYOffset; j <= maxYOffset; j++)
+                {
+                    // reveal neighbor if not already revealed
+                    if (!_board.Locations[y + j][x + i].IsRevealed) Reveal(x + i, y + j);
+                }
             }
         }
     }
