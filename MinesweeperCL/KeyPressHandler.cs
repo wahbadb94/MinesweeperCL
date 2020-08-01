@@ -17,15 +17,17 @@ namespace MinesweeperCL
             _playerLocation = playerLocation;
         }
 
-        public void Handle(ConsoleKey pressed)
+        // handles keypresses and translates into appropriate model manipulations
+        // returns true as long as the action was 'safe', i.e. a mine not hit
+        public bool Handle(ConsoleKey pressed)
         {
             switch (pressed)
             {
                 case ConsoleKey.LeftArrow:
-                    if (_playerLocation.X > 0) _playerLocation.X--; 
+                    if (_playerLocation.X > 0) _playerLocation.X--;
                     break;
                 case ConsoleKey.RightArrow:
-                    if (_playerLocation.X < _board.Size-1) _playerLocation.X++;
+                    if (_playerLocation.X < _board.Size - 1) _playerLocation.X++;
                     break;
                 case ConsoleKey.UpArrow:
                     if (_playerLocation.Y > 0) _playerLocation.Y--;
@@ -39,39 +41,14 @@ namespace MinesweeperCL
                     break;
                 case ConsoleKey.Z:
                     // reveal location
-                    Reveal(_playerLocation.X, _playerLocation.Y);
+                    _board.Reveal(_playerLocation.X, _playerLocation.Y);
+                    if (_board.MineHit) return false;
                     break;
-                default: break;
+                default:
+                    break;
             }
-        }
 
-        private void Reveal(int x, int y)
-        {
-            _board.Locations[y][x].IsRevealed = true;
-            if (_board.DisplayCharacters[y][x] == "-")
-            {
-                RevealNeighbors(x, y);
-            }
-        }
-
-        private void RevealNeighbors(int x, int y)
-        {
-            //Thread.Sleep(50);
-
-            int minXOffset = (x == 0) ? 0 : -1;
-            int maxXOffset = (x == _board.Size - 1) ? 0 : 1;
-            int minYOffset = (y == 0) ? 0 : -1;
-            int maxYOffset = (y == _board.Size - 1) ? 0 : 1;
-
-            // iterate over neighbors
-            for (int i = minXOffset; i <= maxXOffset; i++)
-            {
-                for (int j = minYOffset; j <= maxYOffset; j++)
-                {
-                    // reveal neighbor if not already revealed
-                    if (!_board.Locations[y + j][x + i].IsRevealed) Reveal(x + i, y + j);
-                }
-            }
+            return true;
         }
     }
 }

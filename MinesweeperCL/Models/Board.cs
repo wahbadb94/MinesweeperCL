@@ -10,11 +10,13 @@ namespace MinesweeperCL
         public int Size => Locations.Count; // returns height of board
         public List<List<BoardLocation>> Locations { get; set; }
         public List<List<string>> DisplayCharacters { get; private set; }
+        public bool MineHit;
 
         public Board(List<List<BoardLocation>> locations)
         {
             Locations = locations;
             DisplayCharacters = LocationsToCharacterMatrix();
+            MineHit = false;
         }
 
         public List<List<string>> LocationsToCharacterMatrix()
@@ -65,6 +67,40 @@ namespace MinesweeperCL
             }
 
             return count;
+        }
+
+        public void Reveal(int x, int y)
+        {
+            Locations[y][x].IsRevealed = true;
+            if (DisplayCharacters[y][x] == "-")
+            {
+                RevealNeighbors(x, y);
+            }
+
+            if (Locations[y][x].IsMine)
+            {
+                MineHit = true;
+            }
+        }
+
+        private void RevealNeighbors(int x, int y)
+        {
+            //Thread.Sleep(50);
+
+            int minXOffset = (x == 0) ? 0 : -1;
+            int maxXOffset = (x == Size - 1) ? 0 : 1;
+            int minYOffset = (y == 0) ? 0 : -1;
+            int maxYOffset = (y == Size - 1) ? 0 : 1;
+
+            // iterate over neighbors
+            for (int i = minXOffset; i <= maxXOffset; i++)
+            {
+                for (int j = minYOffset; j <= maxYOffset; j++)
+                {
+                    // reveal neighbor if not already revealed
+                    if (!Locations[y + j][x + i].IsRevealed) Reveal(x + i, y + j);
+                }
+            }
         }
     }
 }

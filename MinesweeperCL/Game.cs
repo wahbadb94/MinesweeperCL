@@ -17,6 +17,9 @@ namespace MinesweeperCL
 
         public void Run()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Clear();
+
             // player starts at origin
             Point playerLocation = new Point(0, 0);
             
@@ -32,9 +35,9 @@ namespace MinesweeperCL
                 view.Display(_board, playerLocation);
 
                 // handles keypress and manipulates model data
-                keyPressHandler.Handle(Console.ReadKey(true).Key);
+                // returns true as long as mine hasn't been hit
+                IsOver = !keyPressHandler.Handle(Console.ReadKey(true).Key);
  
-                // check if game over
             } while (IsOver == false);
         }
     }

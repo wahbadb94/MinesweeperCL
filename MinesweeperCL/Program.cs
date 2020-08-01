@@ -19,7 +19,16 @@ namespace MinesweeperCL
                 Game.Run();
 
                 // ask to play again
+                playAgain = AskPlayAgain();
             } while (playAgain == true);
+        }
+
+        private static bool AskPlayAgain()
+        {
+            Console.Write("Do You want to play again? (Y/n): ");
+            bool playAgain = (Console.ReadLine().ToUpper() == "Y") ? true : false;
+
+            return playAgain;
         }
     }
 }
