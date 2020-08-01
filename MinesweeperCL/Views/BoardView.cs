@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,8 @@ namespace MinesweeperCL
 
         private void DisplayBoard(Board board)
         {
+            ResetConsoleColors();
+
             // iterate over rows
             foreach (var row in board.Locations)
             {
@@ -46,29 +49,47 @@ namespace MinesweeperCL
 
         private void DisplayLocation(BoardLocation location)
         {
-            // thin to display based on location state
-            string displayCharacter;
+            string displayCharacter = getDisplayCharacter(location);
 
-            // display underlying matrix
-            if (location.IsRevealed)
-            {
-                displayCharacter = _displayCharacterMatrix[location.Y][location.X];
-            }
-            else
-            {
-                displayCharacter = (location.IsFlagged == true) ? "o" : " ";
-            }
-
-            // translate to location
+            // translate to location, draw upper cell boarder and contents
             Console.SetCursorPosition(location.X * CellWidth, location.Y * CellHeight);
-
-            // draw upper cell border
             Console.Write($"|{new String('\'', CellWidth - 1)}|");
-
-            // draw contents
             Console.SetCursorPosition(location.X * CellWidth, location.Y * CellHeight + 1);
-            Console.Write($"|{new String(' ', PaddingL)}{displayCharacter}{new String(' ', PaddingR)}|");
+            Console.Write($"|{new String(' ', PaddingL)}");
+            Console.ForegroundColor = ColorFromDisplayCharacter(displayCharacter);
+            Console.Write($"{displayCharacter}");
+            ResetConsoleColors();
+            Console.Write($"{new String(' ', PaddingR)}|");
 
+        }
+
+        private ConsoleColor ColorFromDisplayCharacter(string displayCharacter)
+        {
+            switch (displayCharacter)
+            {
+                case " ":
+                    return ConsoleColor.White;
+                case "1":
+                    return ConsoleColor.DarkBlue;
+                case "2":
+                    return ConsoleColor.DarkGreen;
+                case "3":
+                    return ConsoleColor.DarkRed;
+                case "4":
+                    return ConsoleColor.DarkMagenta;
+                case "5":
+                    return ConsoleColor.DarkYellow;
+                case "6":
+                    return ConsoleColor.DarkGreen;
+                case "7":
+                    return ConsoleColor.DarkBlue;
+                case "8":
+                    return ConsoleColor.DarkRed;
+                case "o":
+                    return ConsoleColor.Black;
+                default:
+                    return ConsoleColor.White;
+            }
         }
 
         private void PlaceCursor(Point currentLocation)
@@ -79,5 +100,25 @@ namespace MinesweeperCL
                 currentLocation.Y * CellHeight + CellHeight / 2
             );
         }
+
+        private string getDisplayCharacter(BoardLocation location)
+        {
+            if (location.IsRevealed)
+            {
+                return _displayCharacterMatrix[location.Y][location.X];
+            }
+            else
+            {
+                return (location.IsFlagged == true) ? "o" : " ";
+            }
+        }
+
+        private void ResetConsoleColors()
+        {
+            Console.BackgroundColor = BackgroundColor;
+            Console.ForegroundColor = ForegroundColor;
+        }
+
+
     }
 }
