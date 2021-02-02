@@ -5,30 +5,20 @@ using System.Linq;
 
 namespace MinesweeperCL
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            // set up game loop so user can play as many times as they want
-            var playAgain = true;
-
+            // user plays as many times as they want
+            bool playAgain;
             do
             {
-                // config and run game
-                var Game = GameConfig.Config();
-                Game.Run();
+                // start a new game
+                var game = GameConfig.Config();
+                game.Run();
 
-                // ask to play again
-                playAgain = AskPlayAgain();
-            } while (playAgain == true);
-        }
-
-        private static bool AskPlayAgain()
-        {
-            Console.Write("Do You want to play again? (Y/n): ");
-            bool playAgain = (Console.ReadLine().ToUpper() == "Y") ? true : false;
-
-            return playAgain;
+                playAgain = game.AskPlayAgain();
+            } while (playAgain);
         }
     }
 }

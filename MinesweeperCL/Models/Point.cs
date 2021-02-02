@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MinesweeperCL
+﻿namespace MinesweeperCL.Models
 {
     public class Point
     {
@@ -19,9 +15,9 @@ namespace MinesweeperCL
         {
             if (!(obj is Point)) return false;
 
-            Point that = obj as Point;
+            var that = (Point) obj;
 
-            return (this.X == that.X && this.Y == that.Y);
+            return (X == that.X && Y == that.Y);
         }
 
         public override int GetHashCode()

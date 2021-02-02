@@ -1,18 +1,21 @@
-﻿using MinesweeperCL;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using MinesweeperCL.Models;
+using MinesweeperCL.Views;
 
 namespace MinesweeperCL
 {
     public class Game
     {
-        private readonly Board _board;
-        public bool IsOver { get; private set; } = false;
+        private readonly KeyPressHandler _keyPressHandler;
+        private readonly Point _playerLocation;
+        private readonly BoardView _boardView;
+        private MoveResult _previousMoveResult;
 
         public Game(Board board)
         {
-            _board = board;
+            _playerLocation = new Point(0, 0);  // player starts at origin
+            _keyPressHandler = new KeyPressHandler(board, _playerLocation);
+            _boardView = new BoardView(board);
         }
 
         public void Run()
@@ -20,25 +23,38 @@ namespace MinesweeperCL
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
-            // player starts at origin
-            Point playerLocation = new Point(0, 0);
-            
-            // give keypress handler access to playerLocation and board Models 
-            KeyPressHandler keyPressHandler = new KeyPressHandler(_board, playerLocation);
-
-            // create and init view
-            BoardView view = new BoardView(_board);
-
             do
             {
+                // print rules
+                _boardView.PrintMessage("Navigation: arrow keys\n" +
+                                        "Select:     'Z' key\n" +
+                                        "Mark:       'X' key");
+
                 // display board
-                view.Display(_board, playerLocation);
+                _boardView.Display(_playerLocation);
 
                 // handles keypress and manipulates model data
-                // returns true as long as mine hasn't been hit
-                IsOver = !keyPressHandler.Handle(Console.ReadKey(true).Key);
+                // returns result of last move
+                _previousMoveResult = _keyPressHandler.Handle(Console.ReadKey(true).Key);
  
-            } while (IsOver == false);
+            } while (_previousMoveResult == MoveResult.StillPlaying);
+
+            _boardView.Display(_playerLocation);
+        }
+
+        public bool AskPlayAgain()
+        {
+            var message = (_previousMoveResult == MoveResult.Won)
+                ? "Congratulations! You Won! :)"
+                : "Sorry, you lost... :(";
+
+            _boardView.PrintMessage(message + "\nDo You want to play again? (Y/n): ");
+
+            var playAgain = Console.ReadLine()?.ToUpper() == "Y";
+            
+            _boardView.ResetConsoleColors();
+
+            return playAgain;
         }
     }
 }

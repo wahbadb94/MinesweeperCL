@@ -10,4 +10,11 @@ namespace MinesweeperCL
         Medium,
         Hard
     }
+
+    public enum MoveResult
+    {
+        Won,
+        Lost,
+        StillPlaying
+    }
 }
