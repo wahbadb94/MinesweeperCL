@@ -14,6 +14,6 @@ namespace MinesweeperCL.Views
         public const int PaddingR = (CellWidth / 2 + CellWidth % 2) - 1;
 
         public const ConsoleColor ForegroundColor = ConsoleColor.White;
-        public const ConsoleColor BackgroundColor = ConsoleColor.DarkGray;
+        public const ConsoleColor BackgroundColor = ConsoleColor.Black;
     }
 }

@@ -26,6 +26,7 @@ namespace MinesweeperCL.Views
 
             // place cursor at player's position
             PlaceCursor(playerPosition);
+
         }
 
         private void DisplayBoard()
@@ -68,23 +69,26 @@ namespace MinesweeperCL.Views
         {
             return displayCharacter switch
             {
-                " " => ConsoleColor.White,
-                "1" => ConsoleColor.DarkBlue,
-                "2" => ConsoleColor.DarkGreen,
-                "3" => ConsoleColor.DarkRed,
-                "4" => ConsoleColor.DarkMagenta,
+                " " => ConsoleColor.Black,
+                "1" => ConsoleColor.Blue,
+                "2" => ConsoleColor.Green,
+                "3" => ConsoleColor.Red,
+                "4" => ConsoleColor.Magenta,
                 "5" => ConsoleColor.DarkYellow,
-                "6" => ConsoleColor.DarkGreen,
-                "7" => ConsoleColor.DarkBlue,
-                "8" => ConsoleColor.DarkRed,
-                "o" => ConsoleColor.Black,
-                "X" => ConsoleColor.DarkRed,
-                _ => ConsoleColor.White,
+                "6" => ConsoleColor.Green,
+                "7" => ConsoleColor.Blue,
+                "8" => ConsoleColor.Red,
+                "o" => ConsoleColor.White,
+                "X" => ConsoleColor.Red,
+                "-" => ConsoleColor.White,
+                _ => ConsoleColor.Black,
             };
         }
 
         private static void PlaceCursor(Point currentLocation)
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+
             // place cursor in the middle of the cell
             Console.SetCursorPosition(
                 currentLocation.X * CellWidth + CellWidth / 2,
